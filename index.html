@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">🏢KHU TỰ TRỊ🏢</title>
+
+  <!-- Font đẹp cho Chích Điện -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {margin:0; padding:0; box-sizing:border-box;}
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    body {
+      background: url('dote.png') center center / contain no-repeat #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: sans-serif;
+      color: white;
+      text-align: center;
+      transition: background-color 0.2s ease;
+    }
+
+    /* Chữ Chích Điện */
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3em;
+      margin-bottom: 20px;
+      color: #00eaff;
+      text-shadow: 0 0 5px #00eaff, 0 0 15px #00eaff, 0 0 30px #00f6ff;
+      animation: electricIdle 1s infinite alternate;
+      z-index: 2;
+    }
+
+    @keyframes electricIdle {
+      0% {text-shadow: 0 0 5px #00eaff, 0 0 15px #00eaff;}
+      100% {text-shadow: 0 0 25px #0ff, 0 0 50px #00f6ff;}
+    }
+
+    /* 🔥 Hiệu ứng điện xanh tím khi bắn */
+    .electric-bg {
+      animation: shockBG 0.15s infinite alternate;
+    }
+    @keyframes shockBG {
+      0% {background-color: rgba(0, 255, 255, 0.2);}
+      50% {background-color: rgba(138, 43, 226, 0.3);}
+      100% {background-color: rgba(0, 0, 255, 0.2);}
+    }
+
+    .menu {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+      z-index: 2;
+    }
+    button {
+      padding: 15px 25px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      transition: 0.2s;
+    }
+    button:hover {background: rgba(255,255,255,0.2);}
+
+    .weapon-select {
+      display: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      max-width: 90%;
+      max-height: 60%;
+      overflow: hidden;
+      z-index: 3;
+    }
+    .weapon-select img {
+      flex: 1 1 auto;
+      max-width: 30%;
+      height: auto;
+      border: 3px solid white;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+      background: rgba(0,0,0,0.4);
+      object-fit: contain;
+    }
+    .weapon-select img:hover {
+      transform: scale(1.05);
+      border-color: yellow;
+    }
+    .hidden {display: none !important;}
+  </style>
+</head>
+<body>
+  <h1 id="title">⚡ Chích Điện ⚡</h1>
+
+  <!-- Menu -->
+  <div class="menu" id="mainMenu">
+    <button id="playBtn">Play</button>
+    <button onclick="alert('Link tải xuống ở đây')">Tải Xuống</button>
+  </div>
+
+  <!-- Chọn vũ khí -->
+  <div class="weapon-select" id="weaponSelect">
+    <img src="vukhi1.png" onclick="chooseWeapon('vukhi1.png')">
+    <img src="vukhi2.png" onclick="chooseWeapon('vukhi2.png')">
+    <img src="vukhi3.png" onclick="chooseWeapon('vukhi3.png')">
+  </div>
+
+  <script>
+    const weaponSelect = document.getElementById('weaponSelect');
+    const playBtn = document.getElementById('playBtn');
+    const title = document.getElementById('title');
+    const mainMenu = document.getElementById('mainMenu');
+
+    const sound1 = new Audio('chichdien1.mp3');
+    const sound2 = new Audio('chichdien2.mp3');
+    const sound3 = new Audio('chichdien3.mp3');
+
+    [sound1, sound2, sound3].forEach(s => { 
+      s.volume = 1.0; 
+      s.loop = true;
+    });
+
+    let weaponChosen = false;
+
+    playBtn.onclick = () => {
+      weaponSelect.style.display = 'flex';
+      mainMenu.classList.add('hidden');
+    };
+
+    function chooseWeapon(img) {
+      document.body.style.background = `url('${img}') center center / contain no-repeat #000`;
+      weaponSelect.classList.add('hidden');
+      title.classList.add('hidden');
+      weaponChosen = true;
+    }
+
+    function playSounds() {
+      if (!weaponChosen) return;
+      sound1.currentTime = 0;
+      sound2.currentTime = 0;
+      sound3.currentTime = 0;
+      sound1.play();
+      sound2.play();
+      sound3.play();
+      document.body.classList.add('electric-bg'); // Bật hiệu ứng điện
+    }
+
+    function stopSounds() {
+      sound1.pause();
+      sound2.pause();
+      sound3.pause();
+      document.body.classList.remove('electric-bg'); // Tắt hiệu ứng điện
+    }
+
+    document.body.addEventListener('mousedown', playSounds);
+    document.body.addEventListener('mouseup', stopSounds);
+
+    document.body.addEventListener('touchstart', playSounds);
+    document.body.addEventListener('touchend', stopSounds);
+
+    // Hiệu ứng tiêu đề trang "KHU TỰ TRỊ"
+    const titles = ["🔥🔥 KHU TỰ TRỊ 🔥🔥",
+      "🏢 KHU TỰ TRỊ ✨",
+      "💥 KHU TỰ TRỊ 💥",
+      "☠️🛐 KHU TỰ TRỊ ☠️🛐"];
+    let idx = 0;
+    setInterval(() => {
+      document.title = titles[idx % titles.length];
+      idx++;
+    }, 600);
+
+  const downloadBtn = document.getElementById('downloadBtn');
+
+  downloadBtn.onclick = () => {
+    const ua = navigator.userAgent.toLowerCase();
+
+    if (/android/i.test(ua)) {
+      // 🔥 Link APK cho Samsung/Android
+      window.location.href = "https://example.com/app-android.apk";
+    } 
+    else if (/iphone|ipad|ipod/i.test(ua)) {
+      // 🔥 Link App Store cho iOS
+      window.location.href = "https://apps.apple.com/app/idXXXXXXXX";
+    } 
+    else if (/macintosh|mac os x/i.test(ua)) {
+      // 🔥 Link DMG cho Mac
+      window.location.href = "https://example.com/app-mac.dmg";
+    } 
+    else if (/windows/i.test(ua)) {
+      // 🔥 Link EXE cho Windows
+      window.location.href = "https://example.com/app-windows.exe";
+    } 
+    else {
+      alert("Thiết bị của bạn chưa được hỗ trợ tải trực tiếp. Hãy truy cập bằng PC hoặc điện thoại.");
+    }
+  };
+  </script>
+</body>
+</html>
