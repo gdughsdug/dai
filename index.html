@@ -106,7 +106,8 @@
   <!-- Menu -->
   <div class="menu" id="mainMenu">
     <button id="playBtn">Play</button>
-    <button onclick="alert('Link tải xuống ở đây')">Tải Xuống</button>
+    <!-- Thay nút tải xuống -->
+<button id="installBtn">📲 Cài Ứng Dụng</button>
   </div>
 
   <!-- Chọn vũ khí -->
@@ -180,29 +181,39 @@
       idx++;
     }, 600);
 
-  const downloadBtn = document.getElementById('downloadBtn');
+  let deferredPrompt;
+  const installBtn = document.getElementById('installBtn');
 
-  downloadBtn.onclick = () => {
-    const ua = navigator.userAgent.toLowerCase();
+  // Bắt sự kiện trước khi hiển thị prompt cài PWA
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.style.display = 'inline-block';
+  });
 
-    if (/android/i.test(ua)) {
-      // 🔥 Link APK cho Samsung/Android
-      window.location.href = "https://example.com/app-android.apk";
-    } 
-    else if (/iphone|ipad|ipod/i.test(ua)) {
-      // 🔥 Link App Store cho iOS
-      window.location.href = "https://apps.apple.com/app/idXXXXXXXX";
-    } 
-    else if (/macintosh|mac os x/i.test(ua)) {
-      // 🔥 Link DMG cho Mac
-      window.location.href = "https://example.com/app-mac.dmg";
-    } 
-    else if (/windows/i.test(ua)) {
-      // 🔥 Link EXE cho Windows
-      window.location.href = "https://example.com/app-windows.exe";
-    } 
-    else {
-      alert("Thiết bị của bạn chưa được hỗ trợ tải trực tiếp. Hãy truy cập bằng PC hoặc điện thoại.");
+  installBtn.onclick = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+    } else {
+      // Fallback: nhận diện hệ điều hành và tải file
+      const ua = navigator.userAgent.toLowerCase();
+      if (/android/i.test(ua)) {
+        window.location.href = "https://example.com/app-android.apk";
+      } 
+      else if (/iphone|ipad|ipod/i.test(ua)) {
+        window.location.href = "https://apps.apple.com/app/idXXXXXXXX";
+      } 
+      else if (/macintosh|mac os x/i.test(ua)) {
+        window.location.href = "https://example.com/app-mac.dmg";
+      } 
+      else if (/windows/i.test(ua)) {
+        window.location.href = "https://example.com/app-windows.exe";
+      } 
+      else {
+        alert("Thiết bị chưa hỗ trợ cài đặt tự động.");
+      }
     }
   };
   </script>
