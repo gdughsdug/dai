@@ -107,7 +107,7 @@
   <div class="menu" id="mainMenu">
     <button id="playBtn">Play</button>
     <!-- Thay nút tải xuống -->
-<button id="installBtn">📲 Cài Ứng Dụng</button>
+<button id="installBtn">📲 Tải xuống</button>
   </div>
 
   <!-- Chọn vũ khí -->
@@ -191,31 +191,30 @@
     installBtn.style.display = 'inline-block';
   });
 
-  installBtn.onclick = async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      await deferredPrompt.userChoice;
-      deferredPrompt = null;
-    } else {
-      // Fallback: nhận diện hệ điều hành và tải file
-      const ua = navigator.userAgent.toLowerCase();
-      if (/android/i.test(ua)) {
-        window.location.href = "https://example.com/app-android.apk";
-      } 
-      else if (/iphone|ipad|ipod/i.test(ua)) {
-        window.location.href = "https://apps.apple.com/app/idXXXXXXXX";
-      } 
-      else if (/macintosh|mac os x/i.test(ua)) {
-        window.location.href = "https://example.com/app-mac.dmg";
-      } 
-      else if (/windows/i.test(ua)) {
-        window.location.href = "https://example.com/app-windows.exe";
-      } 
-      else {
-        alert("Thiết bị chưa hỗ trợ cài đặt tự động.");
-      }
-    }
-  };
+installBtn.onclick = () => {
+  const ua = navigator.userAgent.toLowerCase();
+
+  if (/android/i.test(ua)) {
+    // 📱 Tải Android WebView APK
+    window.location.href = "https://example.com/webview-android.apk";
+  } 
+  else if (/iphone|ipad|ipod/i.test(ua)) {
+    // 🍎 Chuyển sang App Store chứa WebView
+    window.location.href = "https://apps.apple.com/app/idXXXXXXXX";
+  } 
+  else if (/windows/i.test(ua)) {
+    // 💻 Tải WebView cho Windows
+    window.location.href = "https://example.com/webview-windows.exe";
+  } 
+  else if (/macintosh|mac os x/i.test(ua)) {
+    // 🖥️ Tải WebView cho MacOS
+    window.location.href = "https://example.com/webview-mac.dmg";
+  } 
+  else {
+    alert("Thiết bị này chưa hỗ trợ tải WebView trực tiếp.");
+  }
+};
+
   </script>
 </body>
 </html>
